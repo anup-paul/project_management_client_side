@@ -159,7 +159,7 @@ const ProjectHeader = () => {
     return (
         <div>
             <div >
-                <h1 className="text-center mt-5"> <span style={{borderBottom:"3px solid black"}} > Project Management b System </span>  </h1>
+                <h1 className="text-center mt-5"> <span style={{borderBottom:"3px solid black"}} > Project Management System </span>  </h1>
             </div>
 
             {
