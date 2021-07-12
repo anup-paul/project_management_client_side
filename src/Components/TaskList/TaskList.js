@@ -7,19 +7,19 @@ import { faPlus } from '@fortawesome/free-solid-svg-icons'
 
 const TaskList = (props) => {
 
-    // const [newTaskDataN, setNewTaskDataN] = useContext(TaskContext);
-
 
     const handleBack = props.handleBack;
 
     const newTaskData = props.newTaskData;
     const currentProject = props.currentProject;
-    const singleProjectTaskData = newTaskData.filter(data => data.projectId === currentProject.id);
-    // setNewTaskDataN(singleProjectTaskData);
-    // console.log(newTaskDataN);
+    // const singleProjectTaskData = newTaskData.filter(data => data.projectId === currentProject.id);
+    
     const handleEditTask = props.handleEditTask;
     const handleDeleteTask = props.handleDeleteTask;
     const handleNewTask = props.handleNewTask;
+
+    const taskData = props.taskData;
+    const singleProjectTaskData = taskData.filter(data => data.project_id === currentProject.id);
 
     return (
         <div>

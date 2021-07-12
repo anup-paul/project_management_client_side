@@ -6,6 +6,9 @@ const NewTaskForm = (props) => {
     const handleNewTaskSubmit = props.handleNewTaskSubmit;
     const newProjectData = props.newProjectData;
 
+    const projectData = props.projectData;
+    
+
     return (
         <div>
             <div className="mt-5 " >
@@ -27,10 +30,10 @@ const NewTaskForm = (props) => {
                         </div>
                         <div>
                             <label for="exampleFormControlInput1" class="form-label">Select Project</label>
-                            <select onChange={handleNewTaskData} name="projectId" class="form-select" aria-label="Default select example">
+                            <select onChange={handleNewTaskData} name="project_id" class="form-select" aria-label="Default select example">
                                 <option selected>Select Project</option>
                                 {
-                                    newProjectData.map((project, index) => <option value={index + 1} >{project.project_name}</option>)
+                                    projectData.map(project => <option value={project.id} >{project.project_name}</option>)
                                 }
 
                             </select>

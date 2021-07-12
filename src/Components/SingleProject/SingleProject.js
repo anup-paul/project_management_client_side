@@ -11,9 +11,11 @@ const SingleProject = (props) => {
     const handleSingleProject = props.handleSingleProject;
     const newTaskData = props.newTaskData;
 
-    const taskUnderThisProject = newTaskData.filter(dt => data.id == dt.projectId);
-    console.log('task', newTaskData);
-    console.log('data', data);
+    const taskData = props.taskData;
+
+    const taskUnderThisProject = taskData.filter(dt => data.id == dt.project_id);
+    // console.log('task', newTaskData);
+    // console.log('data', data);
 
     return (
         <tr>

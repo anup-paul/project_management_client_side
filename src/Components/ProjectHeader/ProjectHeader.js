@@ -14,28 +14,48 @@ const ProjectHeader = () => {
     const handleNewProject = (e) => {
         e.preventDefault();
         setNewProject(true);
-        //console.log("Clicked");
     }
 
+    const [projectData, setProjectData] = useState([]);
+    const handleGetMethod = () => {
+        fetch('http://localhost/project_management_api/public/api/projects/')
+            .then(res => res.json())
+            .then(data => setProjectData(data.data))
+    }
+    useEffect(() => {
+        handleGetMethod();
+    }, [])
 
 
     const [newProjectData, setNewProjectData] = useState([]);
     const [tempProjectData, setTempProjectData] = useState({});
     const handleNewProjectData = (e) => {
-        // console.log(e.target.value);
         const { name, value } = e.target;
         setTempProjectData({ ...tempProjectData, [name]: value });
 
     }
 
-    //  console.log(newProjectData);
-
 
     const handleNewProjectSubmit = (e) => {
         e.preventDefault();
-        const projectData = newProjectData;
-        projectData.push({ ...tempProjectData, id: projectData.length + 1 });
-        setNewProjectData(projectData);
+        console.log(tempProjectData);
+        // const projectData = newProjectData;
+        // projectData.push({ ...tempProjectData, id: projectData.length + 1 });
+        // setNewProjectData(projectData);
+        fetch('http://localhost/project_management_api/public/api/projects', {
+            method: 'POST',
+            headers: {
+                'content-Type': 'application/json'
+            },
+            body: JSON.stringify(tempProjectData)
+        })
+            .then(res => {
+                console.log(res);
+                res.ok ?
+                    handleGetMethod()
+                    :
+                    console.log("error")
+            })
         setNewProject(false);
     }
 
@@ -52,29 +72,54 @@ const ProjectHeader = () => {
 
     const handleSubmitEditProject = (e, id) => {
         e.preventDefault();
-        const projectData = newProjectData;
-        projectData[id - 1] = tempProjectData;
-        setNewProjectData(projectData);
+        // const projectData = newProjectData;
+        // projectData[id - 1] = tempProjectData;
+        // setNewProjectData(projectData);
+        //console.log(id);
+        fetch(`http://localhost/project_management_api/public/api/projects/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tempProjectData)
+        })
+            .then(res => {
+                res.ok ?
+                    handleGetMethod()
+                    :
+                    console.log("error");
+            })
+            .then(data => console.log('updated Data'))
         setEditProject(false);
 
     }
 
 
     const handleDeleteProject = (data) => {
-       
-        const deleteProject = newProjectData.filter(deleteData => deleteData.id !== data.id);
-        setNewProjectData(deleteProject);
+
+        // const deleteProject = newProjectData.filter(deleteData => deleteData.id !== data.id);
+        // setNewProjectData(deleteProject);
+
+        fetch(`http://localhost/project_management_api/public/api/projects/${data.id}`, {
+            method: 'DELETE'
+        })
+            .then(res => {
+                console.log(res);
+                res.ok ?
+                    handleGetMethod()
+                    :
+                    console.log("delete Error")
+            })
     }
 
 
     const [singleProject, setSingleProject] = useState(false);
     const [currentProject, setCurrentProject] = useState(null);
-    
+
     const handleSingleProject = (e, data) => {
         e.preventDefault();
         setSingleProject(true);
         setCurrentProject(data);
-        
         // console.log("clicked: ", data);
     }
 
@@ -93,13 +138,27 @@ const ProjectHeader = () => {
         // console.log('Check Add Task')
     }
 
+    const [taskData, setTaskData] = useState([]);
+    const handleTaskGetMethod = () => {
+        fetch('http://localhost/project_management_api/public/api/tasks/')
+            .then(res => res.json())
+            .then(data => {
+                setTaskData(data.data);
+                console.log(taskData);
+            });
+    }
+
+    useEffect(() => {
+        handleTaskGetMethod();
+    }, [])
+
 
     const [newTaskData, setNewTaskData] = useState([]);
     const [tempTaskData, setTempTaskData] = useState({})
     const handleNewTaskData = (e) => {
         // console.log(e.target.value);
         const { name, value } = e.target;
-        if(name == 'projectId') {
+        if (name == 'project_id') {
             const newValue = parseInt(value);
             setTempTaskData({ ...tempTaskData, [name]: newValue });
         }
@@ -108,29 +167,40 @@ const ProjectHeader = () => {
         }
         // setTempTaskData({ ...tempTaskData, [name]: value });
     }
-    console.log(tempTaskData);
+    //console.log(tempTaskData);
     // console.log("checked:", newTaskData);
 
 
-    // const [singleProjectTaskData, setSingleProjectTaskData] = useState([]);
+
     const handleNewTaskSubmit = (e) => {
-        e.preventDefault();
-        console.log(tempTaskData);
-        const addTaskData = newTaskData
-        addTaskData.push({ ...tempTaskData, id: addTaskData.length + 1 });
-        setNewTaskData(addTaskData);
-        // const taskData = newTaskData.filter(data => data.projectId === currentProject.id);
-        // setSingleProjectTaskData(taskData);
+        // e.preventDefault();
+        // console.log(tempTaskData);
+        // const addTaskData = newTaskData
+        // addTaskData.push({ ...tempTaskData, id: addTaskData.length + 1 });
+        // setNewTaskData(addTaskData);
+        fetch('http://localhost/project_management_api/public/api/tasks', {
+            method: 'POST',
+            headers: {
+                'content-Type': 'application/json'
+            },
+            body: JSON.stringify(tempTaskData)
+        })
+            .then(res => {
+                console.log(res);
+                res.ok ?
+                    handleTaskGetMethod()
+                    :
+                    console.log("error")
+            })
+
         setNewTask(false);
     }
 
-   
 
-    
 
 
     const [editTask, setEditTask] = useState(false);
-    const handleEditTask = (e,data) => {
+    const handleEditTask = (e, data) => {
         e.preventDefault();
         setTempTaskData(data);
         setEditTask(true);
@@ -139,17 +209,42 @@ const ProjectHeader = () => {
 
 
     const handelEditTaskSubmit = (e, id) => {
-        e.preventDefault();
-        console.log("clicked");
-        let taskDataN = newTaskData;
-        taskDataN[id - 1] = tempTaskData;
-        setNewTaskData(taskDataN);
+        // e.preventDefault();
+        // console.log("clicked");
+        // let taskDataN = newTaskData;
+        // taskDataN[id - 1] = tempTaskData;
+        // setNewTaskData(taskDataN);
+        fetch(`http://localhost/project_management_api/public/api/tasks/${id}`, {
+            method: 'PUT',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(tempTaskData)
+        })
+            .then(res => {
+                res.ok ?
+                    handleTaskGetMethod()
+                    :
+                    console.log("error");
+            })
+            .then(data => console.log('updated Data'))
+        setEditProject(false);
         setEditTask(false);
     }
 
     const handleDeleteTask = (e, data) => {
-        const deleteTaskData = newTaskData.filter(deleteTaka => deleteTaka.id !== data.id);
-        setNewTaskData(deleteTaskData); 
+        // const deleteTaskData = newTaskData.filter(deleteTaka => deleteTaka.id !== data.id);
+        // setNewTaskData(deleteTaskData);
+        fetch(`http://localhost/project_management_api/public/api/tasks/${data.id}`, {
+            method: 'DELETE'
+        })
+            .then(res => {
+                console.log(res);
+                res.ok ?
+                    handleTaskGetMethod()
+                    :
+                    console.log("delete Error")
+            })
     }
 
 
@@ -159,7 +254,7 @@ const ProjectHeader = () => {
     return (
         <div>
             <div >
-                <h1 className="text-center mt-5"> <span style={{borderBottom:"3px solid black"}} > Project Management System </span>  </h1>
+                <h1 className="text-center mt-5"> <span style={{ borderBottom: "3px solid black" }} > Project Management System </span>  </h1>
             </div>
 
             {
@@ -173,6 +268,7 @@ const ProjectHeader = () => {
                                             handleNewTaskData={handleNewTaskData}
                                             handleNewTaskSubmit={handleNewTaskSubmit}
                                             newProjectData={newProjectData}
+                                            projectData={projectData}
                                         ></NewTaskForm>
                                     )
                                     :
@@ -193,10 +289,11 @@ const ProjectHeader = () => {
                                                         <>
                                                             <div className="d-flex justify-content-center" >
                                                                 <div className="w-75" >
-                                                                   
+
                                                                     <TaskList
                                                                         handleBack={handleBack}
                                                                         newTaskData={newTaskData}
+                                                                        taskData={taskData}
                                                                         currentProject={currentProject}
                                                                         // singleProjectTaskData={singleProjectTaskData}
                                                                         handleEditTask={handleEditTask}
@@ -249,16 +346,18 @@ const ProjectHeader = () => {
                                                             <div className="d-flex justify-content-center" >
                                                                 <div className="w-75">
 
-                                                                    <h2 className="text-center mt-3" >Project List(<span style={{ color: "red" }} >{newProjectData.length}</span>)  </h2>
+                                                                    <h2 className="text-center mt-3" >Project List(<span style={{ color: "red" }} >{projectData.length}</span>)  </h2>
                                                                     <div className=" d-flex justify-content-end " >
                                                                         <button className="btn btn-outline-primary  mb-2" onClick={(e) => handleNewProject(e)} >  <FontAwesomeIcon icon={faPlus} /> <b>New Project</b></button>
                                                                     </div>
                                                                     <ProjectList
+                                                                        projectData={projectData}
                                                                         newProjectData={newProjectData}
                                                                         handleEditProject={handleEditProject}
                                                                         handleDeleteProject={handleDeleteProject}
                                                                         handleSingleProject={handleSingleProject}
                                                                         newTaskData={newTaskData}
+                                                                        taskData={taskData}
                                                                     >
 
                                                                     </ProjectList>

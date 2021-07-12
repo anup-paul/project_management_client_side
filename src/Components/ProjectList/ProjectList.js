@@ -11,6 +11,10 @@ const ProjectList = (props) => {
 
     const newTaskData = props.newTaskData;
 
+    const projectData = props.projectData;
+
+    const taskData = props.taskData;
+
     return (
         <div  >
             <table class="table border mt-3">
@@ -28,7 +32,7 @@ const ProjectList = (props) => {
                 <tbody>
 
                     {
-                        newProjectData.map((data, index) =>
+                        projectData.map((data, index) =>
                             <SingleProject
                                 data={data}
                                 index={index}
@@ -36,6 +40,7 @@ const ProjectList = (props) => {
                                 handleDeleteProject={handleDeleteProject}
                                 handleEditProject={handleEditProject}
                                 newTaskData={newTaskData}
+                                taskData = {taskData}
                             />
                         )
                     }
