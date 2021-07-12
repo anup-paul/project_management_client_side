@@ -38,7 +38,7 @@ const SingleProject = (props) => {
                 style={{ color: "red" }}
                 icon={faTrashAlt}
                 onClick={() => {
-                    if (window.confirm('Are you sure you want to delete this offer?')) {
+                    if (window.confirm('Are you sure you want to delete this?')) {
                         handleDeleteProject(data)
                     }
                 }}

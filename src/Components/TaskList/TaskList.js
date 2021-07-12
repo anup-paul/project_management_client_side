@@ -60,7 +60,7 @@ const TaskList = (props) => {
                                         style={{ color: "red" }}
                                         icon={faTrashAlt}
                                         onClick={(e) =>{
-                                            if (window.confirm('Are you sure you want to delete this offer?')) {
+                                            if (window.confirm('Are you sure you want to delete this ?')) {
                                                 handleDeleteTask(e, data)
                                             }
                                         } }
