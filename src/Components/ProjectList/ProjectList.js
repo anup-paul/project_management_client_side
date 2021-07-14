@@ -1,4 +1,5 @@
 import React from 'react';
+import { useHistory } from 'react-router-dom';
 import SingleProject from '../SingleProject/SingleProject';
 
 
@@ -14,6 +15,13 @@ const ProjectList = (props) => {
     const projectData = props.projectData;
 
     const taskData = props.taskData;
+
+
+    const history = useHistory();
+    const handleLogOutButton = () => {
+        console.log("clicked");
+        history.push('/');
+    }
 
     return (
         <div  >
@@ -40,14 +48,18 @@ const ProjectList = (props) => {
                                 handleDeleteProject={handleDeleteProject}
                                 handleEditProject={handleEditProject}
                                 newTaskData={newTaskData}
-                                taskData = {taskData}
+                                taskData={taskData}
                             />
                         )
                     }
 
 
                 </tbody>
+
             </table>
+            <div className="d-flex justify-content-end" >
+                <button onClick={(e)=>handleLogOutButton(e)}  className="btn btn-danger" >LogOut</button>
+            </div>
         </div>
     );
 };

@@ -20,10 +20,13 @@ function App() {
       <Router>
         <Switch>
           <Route exact path="/" >
-            <SignUp></SignUp>
+          <LogIn></LogIn>   
           </Route>
           <Route path="/login">
             <LogIn></LogIn>
+          </Route>
+          <Route path="/signUp" >
+            <SignUp></SignUp>
           </Route>
           <Route path="/projectManagement" >
             <ProjectHeader></ProjectHeader>
